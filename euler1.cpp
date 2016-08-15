@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include <cassert>
 #include <iostream>
-using namespace std;
 unsigned long long sum_multiples_of_n(unsigned int n, unsigned int upto)
 {
 	assert(n > 0);
@@ -28,7 +27,7 @@ unsigned int greatest_common_divisor(unsigned int n1, unsigned int n2)
 	}
 	return n1;
 }
-unsigned long long sumofmultiples(unsigned int m, unsigned int n, unsigned int limit)
+unsigned long long sumofmultiples_of_pair(unsigned int m, unsigned int n, unsigned int limit)
 {
 	assert(m > 0 && n > 0);
 	assert(m <= limit && n <= limit);
@@ -38,18 +37,19 @@ unsigned long long sumofmultiples(unsigned int m, unsigned int n, unsigned int l
 		m = n;
 		n = temp;
 	}
-	unsigned long long sumofmultiplesofn = sum_multiples_of_n(n, limit);
-	if (n%m == 0)return sumofmultiplesofn;
-	unsigned int greatest_common_div = greatest_common_divisor(m, n);
-	unsigned long long result = sum_multiples_of_n(m, limit) + sumofmultiplesofn;
-	if(m*n / greatest_common_div<limit)result -= sum_multiples_of_n(m*n / greatest_common_div, limit);
+	unsigned long long result = sum_multiples_of_n(n, limit);
+	if (n%m)
+	{
+		unsigned int smallest_common_multiple = m*n/greatest_common_divisor(m, n);
+		result += sum_multiples_of_n(m, limit);
+		if (smallest_common_multiple<limit)result -= sum_multiples_of_n(smallest_common_multiple, limit);
+	}
 	return result;
 }
 int main()
 {
 	unsigned int n1(3), n2(5);
 	unsigned int limit = 1000;
-	cout << sumofmultiples(n1, n2, limit) << endl;
+	std::cout << sumofmultiples_of_pair(n1, n2, limit) << std::endl;
     return 0;
 }
-
